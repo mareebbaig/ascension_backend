@@ -40,11 +40,11 @@
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "@hapi/joi": "^17.1.1",
-
     "amqplib": "^0.6.0",
     "async-redis": "^1.1.7",
     "awilix": "^4.2.1",
     "aws-sdk": "^2.806.0",
+    "bcrypt": "^5.1.0",
     "bluebird": "^3.5.3",
     "checkout-sdk-node": "^1.0.17",
     "fastify": "^3.2.1",
@@ -59,6 +59,7 @@
     "generate-schema": "^2.6.0",
     "ioredis": "^4.17.3",
     "joi-objectid": "^3.0.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.20",
     "nconf": "^0.10.0",
     "node-fetch": "^2.6.1",
