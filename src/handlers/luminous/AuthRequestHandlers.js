@@ -1,5 +1,5 @@
 module.exports = function AuthRequestHandlers(opts) {
-    const { authMediator, guid, bcrypt, logger, config, jwt , _ } = opts;
+    const { authMediator, guid, bcrypt, logger, config, jwt, _ } = opts;
     const { secret } = config.get("jwt");
 
     async function initial(request, reply) {
@@ -38,20 +38,24 @@ module.exports = function AuthRequestHandlers(opts) {
         try {
             const { email, password } = request.body;
             const response = await authMediator.checkUser({ email });
-
+            console.log("login response", response);
             if (response.length == 0) {
-                reply.send({ error: "Incorrect email" }).status(401);
+                reply.send({ message: "Incorrect email" }).status(401);
             } else {
                 if (await bcrypt.compare(password, response[0].password)) {
                     const payLoad = {
                         user_id: response[0].user_id,
+                        first_name: response[0].first_name,
+                        last_name: response[0].last_name,
+                        email: response[0].email,
+                        user_type: response[0].user_type,
                     };
 
                     const token = await jwt.sign(payLoad, secret);
 
                     reply.send({ token: token });
                 } else {
-                    reply.send({ error: "Incorrect password" }).status(401);
+                    reply.send({ message: "Incorrect password" }).status(401);
                 }
             }
         } catch (error) {
