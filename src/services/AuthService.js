@@ -1,17 +1,20 @@
-module.exports = function SvcTalos(opts) {
-    const { svcCache, queryHandler, mdlTest, db } = opts;
+module.exports = function AuthService(opts) {
+    const { mdlTest, auth, db } = opts;
     async function initial() {
-        const result = db["primary"].task(async (t) => {
-            await t.any(mdlTest.usertable);
+        // const result = db["primary"].task(async (t) => {
+        //      await t.any(mdlTest.industriesTable);
 
-            await t.any(mdlTest.sellerTabel);
-        });
+        //     // await t.any(mdlTest.location);
+        // });
+        const result = db["primary"].any(mdlTest.location);
+
+        console.log(result);
         const response = result;
         return response;
     }
 
     async function checkUser({ email }) {
-        const result = db["primary"].any(mdlTest.checkUser, { email });
+        const result = db["primary"].any(auth.checkUser, { email });
         return result;
     }
 
@@ -25,7 +28,7 @@ module.exports = function SvcTalos(opts) {
         title,
     }) {
         const result = db["primary"].task(async (t) => {
-            await t.none(mdlTest.signup, {
+            await t.none(auth.signup, {
                 user_id,
                 first_name,
                 last_name,
@@ -35,7 +38,7 @@ module.exports = function SvcTalos(opts) {
             });
             if (user_type == 1) {
                 // seller type = 1
-                await t.any(mdlTest.insertSeller, {
+                await t.any(auth.insertSeller, {
                     user_id,
                     title,
                 });
