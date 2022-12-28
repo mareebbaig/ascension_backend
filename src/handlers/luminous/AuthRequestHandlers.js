@@ -38,9 +38,11 @@ module.exports = function AuthRequestHandlers(opts) {
         try {
             const { email, password } = request.body;
             const response = await authMediator.checkUser({ email });
-            console.log("login response", response);
+            console.log("User:", response);
             if (response.length == 0) {
-                reply.send({ message: "Incorrect email" }).status(401);
+                reply
+                    .send({ message: "Incorrect email or password" })
+                    .status(401);
             } else {
                 if (await bcrypt.compare(password, response[0].password)) {
                     const payLoad = {
@@ -55,7 +57,9 @@ module.exports = function AuthRequestHandlers(opts) {
 
                     reply.send({ token: token });
                 } else {
-                    reply.send({ message: "Incorrect password" }).status(401);
+                    reply
+                        .send({ message: "Incorrect email or password" })
+                        .status(401);
                 }
             }
         } catch (error) {

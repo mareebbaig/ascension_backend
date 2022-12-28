@@ -1,13 +1,13 @@
 module.exports = function AuthMediator(opts) {
-    const { svcTalos } = opts;
+    const { authService } = opts;
 
     async function initial() {
-        account = await svcTalos.initial();
+        account = await authService.initial();
         return account;
     }
 
     async function checkUser({ email }) {
-        return await svcTalos.checkUser({ email });
+        return await authService.checkUser({ email });
     }
 
     async function signUp({
@@ -19,7 +19,7 @@ module.exports = function AuthMediator(opts) {
         user_type,
         title,
     }) {
-        return await svcTalos.signUp({
+        return await authService.signUp({
             user_id,
             first_name,
             last_name,
