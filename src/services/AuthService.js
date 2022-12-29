@@ -6,8 +6,9 @@ module.exports = function AuthService(opts) {
 
         //     // await t.any(mdlTest.location);
         // });
-        const result = db["primary"].any(mdlTest.location);
+        //const result = db["primary"].any(mdlTest.location);
 
+        const result = db["primary"].any(mdlTest.listingTable);
         console.log(result);
         const response = result;
         return response;
