@@ -12,6 +12,10 @@ module.exports = async (process) => {
         });
         await server.registerRoutes({ routes });
         await server.start();
+
+
+
+        
     } catch (_error) {
         console.error("Fatal Error In Bootstrap > ", _error);
         process.exit(1);
