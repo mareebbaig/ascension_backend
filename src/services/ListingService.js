@@ -1,33 +1,54 @@
-module.exports = function ListingService(opts) {
-    const { db, listing } = opts;
-    //async function createListing(title,headline,description,reason_for_selling,industry,location,is_auctioned,is_established,seller) {
-    async function createListing(listingFormData) {
-        console.log("listingFormData: ", listingFormData);
+const pgp = require("pg-promise")();
 
+module.exports = function ListingService(opts) {
+    const { db, listing, _ } = opts;
+
+    async function createListing(listingFormData) {
         const { price } = listingFormData;
 
-        const priceResult = await db["primary"].query(
-            listing.insertPrice,
-            price
-        );
+        const { images } = listingFormData;
 
-        const priceId = priceResult[0]["id"];
+        const result = await db["primary"].tx(async (t) => {
+            const priceResult = await t.query(listing.insertPrice, price);
 
-        console.log("title", listingFormData.title);
+            const priceId = priceResult[0]["id"];
 
-        const result = await db["primary"].query(listing.createListing, {
-            title: listingFormData.title,
-            headline: listingFormData.headline,
-            description: listingFormData.description,
-            reason_for_selling: listingFormData.reason_for_selling,
-            industry: listingFormData.industry,
-            location: listingFormData.location,
-            is_auctioned: listingFormData.is_auctioned,
-            is_established: listingFormData.is_established,
-            price: priceId,
-            seller: listingFormData.seller,
+            const listingResult = await t.query(listing.createListing, {
+                title: listingFormData.title,
+                headline: listingFormData.headline,
+                description: listingFormData.description,
+                reason_for_selling: listingFormData.reason_for_selling,
+                industry: listingFormData.industry,
+                location: listingFormData.location,
+                is_auctioned: listingFormData.is_auctioned,
+                is_established: listingFormData.is_established,
+                price: priceId,
+                seller: listingFormData.seller,
+            });
+
+            const listingId = listingResult[0]["id"];
+
+            if (!_.isEmpty(images)) {
+                const cs = new pgp.helpers.ColumnSet(
+                    ["listing_id", "image_url"],
+                    {
+                        table: "images",
+                    }
+                );
+
+                const values = images.map((image) => {
+                    return { listing_id: listingId, image_url: image };
+                });
+
+                const imageQuery = pgp.helpers.insert(values, cs);
+
+                const result = await t.query(imageQuery);
+
+                return result;
+            } else {
+                return [];
+            }
         });
-
         return result;
     }
     return {
