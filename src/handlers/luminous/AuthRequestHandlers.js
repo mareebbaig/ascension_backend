@@ -3,7 +3,6 @@ module.exports = function AuthRequestHandlers(opts) {
     webSockets = {};
     async function initial(request, reply) {
         // const { body, elSession } = request;
-        // console.log('initial')
         const sent = await authMediator.initial();
         reply.send(JSON.stringify(sent));
     }
@@ -12,7 +11,6 @@ module.exports = function AuthRequestHandlers(opts) {
         const sender_id = request.query.sender_id;
         const receiver_id = request.query.receiver_id;
         result = await getMessages(sender_id, receiver_id);
-        console.log(result);
         if (result[0]) {
             connection.socket.send(JSON.stringify(result));
         }
@@ -40,7 +38,7 @@ module.exports = function AuthRequestHandlers(opts) {
             delete webSockets[sender_id];
             const last_message = await cache["primary"].get(sender_id);
             if (last_message) {
-                await updateInbox(sender_id, received_id, last_message);
+                await updateInbox(sender_id, receiver_id, last_message);
                 console.log("last message updated : ", last_message);
             }
             console.log("deleted: " + sender_id);
@@ -63,12 +61,12 @@ module.exports = function AuthRequestHandlers(opts) {
         return result;
     }
 
-    async function writeMsgInDB(messageObject, userID, received_id) {
+    async function writeMsgInDB(messageObject, sender_id, receiver_id) {
         messageObject.chat_id = await guid.v1();
         messageObject.created_at = new Date();
         const response = await authMediator.writeMsgInDB(
             { ...messageObject },
-            userID,
+            sender_id,
             receiver_id
         );
     }

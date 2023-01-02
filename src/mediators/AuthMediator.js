@@ -7,13 +7,13 @@ module.exports = function AuthMediator(opts) {
     }
     async function writeMsgInDB(
         { chat_id, message, created_at },
-        userID,
-        received_id
+        sender_id,
+        receiver_id
     ) {
-        const hash = userID + user_id; // sender + recieverid
+        const hash = sender_id + receiver_id; // sender + recieverid
         return await svcTalos.writeMsgInDB({
             chat_id,
-            user_id,
+            sender_id,
             hash,
             message,
             created_at,
@@ -38,7 +38,6 @@ module.exports = function AuthMediator(opts) {
     }
 
     async function getInbox({ user_id }) {
-        console.log(user_id);
         return await svcTalos.getInbox(user_id);
     }
 

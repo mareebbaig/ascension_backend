@@ -13,14 +13,14 @@ module.exports = function SvcTalos(opts) {
 
     async function writeMsgInDB({
         chat_id,
-        user_id,
+        sender_id,
         hash,
         message,
         created_at,
     }) {
         const result = await db["primary"].query(mdlTest.insertIntoChat, {
             chat_id,
-            user_id,
+            user_id: sender_id,
             hash,
             message,
             created_at,
@@ -54,7 +54,6 @@ module.exports = function SvcTalos(opts) {
         });
         var allUsers = [];
         for (i = 0; i < result.length; i++) {
-            // console.log(result[i]);
             if (result[i].receiver_id == user_id) {
                 temp = await db["primary"].query(mdlTest.getUser, {
                     user_id: result[i].sender_id,
@@ -69,8 +68,6 @@ module.exports = function SvcTalos(opts) {
                 allUsers.push(temp[0]);
             }
         }
-        // console.log(allUsers);
-
         return allUsers;
     }
 
@@ -118,7 +115,6 @@ module.exports = function SvcTalos(opts) {
         created_at,
         title,
     }) {
-        // console.log("inbox id : ", inbox_id);
         await db["primary"].any(mdlTest.insertIntoInbox, {
             inbox_id,
             sender_id,
