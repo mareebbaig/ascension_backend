@@ -8,7 +8,7 @@ module.exports = function AuthService(opts) {
         // });
         //const result = db["primary"].any(mdlTest.location);
 
-        const result = db["primary"].any(mdlTest.listingTable);
+        const result = db["primary"].query('select * from cities');
         console.log(result);
         const response = result;
         return response;

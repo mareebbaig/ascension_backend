@@ -14,8 +14,12 @@ module.exports = function MdlTest() {
         insertSeller:
             "insert into business_sellers(user_id , title) VALUES (${user_id},${title})",
 
-        priceTable : 'create table prices (id int GENERATED ALWAYS AS IDENTITY primary key,asking_price double precision not null,cash_flow double precision not null,gross_revenue double precision not null,inventory_price double precision, net_income double precision not null, ebitda double precision)',
+        imagesTable : "create table images(id int generated always as identity primary key,listing_id int references listing(id) , image_url varchar)",
 
-        listingTable : "create table listing(id int  GENERATED ALWAYS AS IDENTITY primary key, title varchar not null, headline varchar not null, description varchar not null,reason_for_selling varchar not null,industry int references industries(id), location int references locations(id) , is_auctioned bool not null,is_established bool not null, price int references prices(id) unique, seller varchar references users(user_id))"
+        priceTable:
+            "create table prices (id int GENERATED ALWAYS AS IDENTITY primary key,asking_price double precision not null,cash_flow double precision not null,gross_revenue double precision not null,inventory_price double precision, net_income double precision not null, ebitda double precision)",
+
+        listingTable:
+            "create table listing(id int  GENERATED ALWAYS AS IDENTITY primary key, title varchar not null, headline varchar not null, description varchar not null,reason_for_selling varchar not null,industry int references industries(id), location int references locations(id) , is_auctioned bool not null,is_established bool not null, price int references prices(id) unique, seller varchar references users(user_id))",
     };
 };

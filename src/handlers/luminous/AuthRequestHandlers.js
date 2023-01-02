@@ -12,7 +12,7 @@ module.exports = function AuthRequestHandlers(opts) {
         try {
             const { body } = request;
             const response = await authMediator.checkUser({ ...body });
-            if (response.length == 0) {
+            if (_.isEmpty(response)) {
                 reply.send(false);
             } else reply.send(true);
         } catch (error) {
@@ -39,7 +39,7 @@ module.exports = function AuthRequestHandlers(opts) {
             const { email, password } = request.body;
             const response = await authMediator.checkUser({ email });
             console.log("User:", response);
-            if (response.length == 0) {
+            if (_.isEmpty(response)) {
                 reply
                     .send({ message: "Incorrect email or password" })
                     .status(401);
