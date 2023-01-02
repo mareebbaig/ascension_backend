@@ -1,33 +1,34 @@
-const FastServer = require('./globals/server');
+const FastServer = require("./globals/server");
 
-const routes = require('./routes');
+const routes = require("./routes");
 
 module.exports = async (process) => {
     let server = null;
 
     try {
-
         server = await FastServer({
-            process
+            process,
         });
+        await server.registerSocket();
         await server.registerRoutes({ routes });
         await server.start();
+        // await server.io.on()
     } catch (_error) {
         console.error("Fatal Error In Bootstrap > ", _error);
         process.exit(1);
     }
 
-    process.on('SIGINT', async () => {
-        console.log('Stopping server >');
+    process.on("SIGINT", async () => {
+        console.log("Stopping server >");
 
         await server.fastServer.close();
 
-        console.log('Server has stopped >');
+        console.log("Server has stopped >");
 
         process.exit(0);
     });
 
     return {
         server: server.fastServer,
-    }
+    };
 };

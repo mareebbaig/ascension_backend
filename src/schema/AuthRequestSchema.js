@@ -17,7 +17,7 @@ module.exports = function AuthRequestSchema(opts) {
 
     const reqtest = () => {
         return {
-            method: "POST",
+            method: "GET",
             url: "/initial",
             handler: authRequestHandlers.initial,
         };
@@ -45,11 +45,39 @@ module.exports = function AuthRequestSchema(opts) {
             handler: authRequestHandlers.login,
         };
     };
+    const CreateInbox = () => {
+        return {
+            method: "POST",
+            url: "/CreateInbox",
+            handler: authRequestHandlers.CreateInbox,
+        };
+    };
+    const CreateConnection = () => {
+        return {
+            method: "GET",
+            url: "/connection/",
+            WebSocket: true,
+            // preHandler: authRequestHandlers.handler,
+            handler: authRequestHandlers.handler,
+            wsHandler: authRequestHandlers.websocketHandler,
+        };
+    };
+
+    const getInbox = () => {
+        return {
+            method: "POST",
+            url: "/getInbox",
+            handler: authRequestHandlers.getInbox,
+        };
+    };
 
     return {
         reqtest,
         checkUser,
         signUp,
         login,
+        CreateInbox,
+        CreateConnection,
+        getInbox,
     };
 };
