@@ -10,12 +10,17 @@ module.exports = function AuthRequestHandlers(opts) {
     async function websocketHandler(connection, request) {
         const sender_id = request.query.sender_id;
         const receiver_id = request.query.receiver_id;
+
         result = await getMessages(sender_id, receiver_id);
-        if (result[0]) {
-            connection.socket.send(JSON.stringify(result));
-        }
+
+        //sending data to the connected client
+        connection.socket.send(JSON.stringify(result));
+
+        // storing connected connection to the local storage --> todo:  redis mai save krna hai bad mai (stateless)
         webSockets[sender_id] = connection;
         console.log("connected: " + sender_id);
+
+        // event for message
         connection.socket.on("message", async (message) => {
             console.log("received from " + sender_id + ": " + message);
             const messageObject = JSON.parse(message);
