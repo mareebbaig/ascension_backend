@@ -8,10 +8,17 @@ module.exports = function AuthService(opts) {
         // });
         //const result = db["primary"].any(mdlTest.location);
 
-        const result = db["primary"].query('select * from cities');
+        const result = db["primary"].query(mdlTest.location);
         console.log(result);
         const response = result;
         return response;
+    }
+
+    async function insertCities(value) {
+        const result = db["primary"].query(mdlTest.insertCities, {
+            label: value,
+        });
+        return result;
     }
 
     async function checkUser({ email }) {
@@ -53,5 +60,6 @@ module.exports = function AuthService(opts) {
         initial,
         checkUser,
         signUp,
+        insertCities,
     };
 };

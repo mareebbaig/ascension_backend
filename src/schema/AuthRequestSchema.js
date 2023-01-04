@@ -23,6 +23,14 @@ module.exports = function AuthRequestSchema(opts) {
         };
     };
 
+    const insertCities = () => {
+        return {
+            method: "POST",
+            url: "/insertCities",
+            handler: authRequestHandlers.insertCities,
+        };
+    };
+
     const checkUser = () => {
         return {
             method: "POST",
@@ -51,5 +59,6 @@ module.exports = function AuthRequestSchema(opts) {
         checkUser,
         signUp,
         login,
+        insertCities,
     };
 };

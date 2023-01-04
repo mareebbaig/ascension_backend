@@ -20,6 +20,13 @@ module.exports = function AuthRequestHandlers(opts) {
             reply.send(error);
         }
     }
+    async function insertCities(request, reply) {
+        const { body } = request;
+        for (i = 0; i < body.cities.length; i++) {
+            await authMediator.insertCities(body.cities[i]);
+        }
+        reply.send("ok");
+    }
 
     async function signUp(request, reply) {
         try {
@@ -70,6 +77,7 @@ module.exports = function AuthRequestHandlers(opts) {
 
     return {
         initial,
+        insertCities,
         checkUser,
         signUp,
         login,
