@@ -35,13 +35,18 @@ module.exports = function AuthRequestHandlers(opts) {
                 );
                 toUserWebSocket.socket.send(JSON.stringify(messageObject));
             }
-            await cache["primary"].set(sender_id, messageObject.message);
+            await cache["primary"].set(
+                sender_id + receiver_id,
+                messageObject.message
+            );
             await writeMsgInDB(messageObject, sender_id, receiver_id);
         });
 
         connection.socket.on("close", async function () {
             delete webSockets[sender_id];
-            const last_message = await cache["primary"].get(sender_id);
+            const last_message = await cache["primary"].get(
+                sender_id + receiver_id
+            );
             if (last_message) {
                 await updateInbox(sender_id, receiver_id, last_message);
                 console.log("last message updated : ", last_message);
