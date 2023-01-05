@@ -16,7 +16,7 @@ module.exports = function AuthMediator(opts) {
         receiver_id
     ) {
         const hash = sender_id + receiver_id; // sender + recieverid
-        return await svcTalos.writeMsgInDB({
+        return await authService.writeMsgInDB({
             chat_id,
             sender_id,
             hash,
@@ -26,7 +26,7 @@ module.exports = function AuthMediator(opts) {
     }
 
     async function getMessages(sender_id, received_id) {
-        return await svcTalos.getMessages(sender_id, received_id);
+        return await authService.getMessages(sender_id, received_id);
     }
     async function updateInbox(
         sender_id,
@@ -34,7 +34,7 @@ module.exports = function AuthMediator(opts) {
         last_message,
         created_at
     ) {
-        return await svcTalos.updateInbox(
+        return await authService.updateInbox(
             sender_id,
             received_id,
             last_message,
@@ -43,7 +43,7 @@ module.exports = function AuthMediator(opts) {
     }
 
     async function getInbox({ user_id }) {
-        return await svcTalos.getInbox(user_id);
+        return await authService.getInbox(user_id);
     }
 
     async function checkUser({ email }) {
@@ -79,7 +79,7 @@ module.exports = function AuthMediator(opts) {
         created_at,
         title,
     }) {
-        return await svcTalos.CreateInbox({
+        return await authService.CreateInbox({
             inbox_id,
             sender_id,
             receiver_id,

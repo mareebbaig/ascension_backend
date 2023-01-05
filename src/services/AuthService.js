@@ -85,7 +85,7 @@ module.exports = function AuthService(opts) {
     }
 
     async function checkUser({ email }) {
-        const result = await db["primary"].any(mdlTest.checkUser, { email });
+        const result = await db["primary"].any(auth.checkUser, { email });
 
         return result;
     }
