@@ -28,7 +28,7 @@ module.exports = async function FastDI(options = {}) {
         Boom: awilix.asValue(Boom),
         bcrypt: awilix.asValue(bcrypt),
         _: awilix.asValue(_),
-        jwt : awilix.asValue(jwt)
+        jwt: awilix.asValue(jwt),
     });
 
     container.loadModules(

@@ -1,30 +1,31 @@
-const fastify = require('fastify');
-const helmet = require('fastify-helmet');
-const fastifyJWT = require('fastify-jwt');
-const fastifyCors = require('fastify-cors');
+const fastify = require("fastify");
+const helmet = require("fastify-helmet");
+const fastifyJWT = require("fastify-jwt");
+const fastifyCors = require("fastify-cors");
+const websocket = require("@fastify/websocket");
 
-const config = require('./config');
-const di = require('./di');
-const adapters = require('../adapters');
+const config = require("./config");
+const di = require("./di");
+const adapters = require("../adapters");
 
-const headlocker = require('../middleware/Headlocker');
-const errorDecorator = require('../middleware/ErrorDecorator');
-const responseDecorator = require('../middleware/ResponseDecorator');
+const headlocker = require("../middleware/Headlocker");
+const errorDecorator = require("../middleware/ErrorDecorator");
+const responseDecorator = require("../middleware/ResponseDecorator");
 
 module.exports = async function FastServer(options) {
-
     const process = options.process;
 
     let userOptions = options.options;
 
     if (userOptions === undefined) userOptions = {};
 
-    if (process === undefined) throw new Error('FastServer is dependent on [process]');
+    if (process === undefined)
+        throw new Error("FastServer is dependent on [process]");
 
     let _server = null;
 
     const defaultOptions = {
-        bodyLimit: (1048576 * 8),
+        bodyLimit: 1048576 * 8,
         logger: {
             level: config.get("fastify").log_level,
             prettyPrint: true,
@@ -32,8 +33,8 @@ module.exports = async function FastServer(options) {
                 res(res) {
                     return {
                         code: res.code,
-                        body: res.body
-                    }
+                        body: res.body,
+                    };
                 },
                 req(req) {
                     return {
@@ -41,11 +42,11 @@ module.exports = async function FastServer(options) {
                         url: req.url,
                         path: req.path,
                         parameters: req.parameters,
-                        headers: req.headers
-                    }
-                }
-            }
-        }
+                        headers: req.headers,
+                    };
+                },
+            },
+        },
     };
 
     const serverOptions = { ...defaultOptions, ...userOptions };
@@ -57,27 +58,34 @@ module.exports = async function FastServer(options) {
 
         const _di = await di({
             logger: _server.log,
-            config
+            config,
         });
 
         const _container = await _di._container();
 
         const _adapters = await adapters(_container.cradle);
 
-        await _di.register('db', _adapters.db, true);
-        await _di.register('cache', _adapters.cache, true);
-        await _di.register('queue', _adapters.queue, true);
+        // _server.register(fasitfyIO);
 
-        await decorateServer('di', () => _container);
+        await _di.register("db", _adapters.db, true);
+        await _di.register("cache", _adapters.cache, true);
+        await _di.register("queue", _adapters.queue, true);
+        // await _di.register("socket", _server.io, true);
 
-        _server.decorateRequest('elSession', null);
+        await decorateServer("di", () => _container);
 
-        _server.setValidatorCompiler(({ schema }) => data => schema.validate(data));
+        _server.decorateRequest("elSession", null);
+
+        _server.setValidatorCompiler(
+            ({ schema }) =>
+                (data) =>
+                    schema.validate(data)
+        );
 
         const { bootstrapMediator } = _container.cradle;
 
         await bootstrapMediator.initialize();
-    }
+    };
 
     const defaultMiddleware = async () => {
         _server.register(helmet);
@@ -85,7 +93,7 @@ module.exports = async function FastServer(options) {
         _server.register(fastifyCors);
 
         _server.register(fastifyJWT, {
-            secret: config.get('jwt').secret,
+            secret: config.get("jwt").secret,
         });
 
         _server.setErrorHandler(function (error, request, reply) {
@@ -97,44 +105,51 @@ module.exports = async function FastServer(options) {
 
             // if "boom" error object
             if (error && error.isBoom) {
-                const _code = _.get(error, 'output.statusCode', 500);
-                const _payload = Object.assign(error.output.payload, { data: error.data }, { message: error.message });
+                const _code = _.get(error, "output.statusCode", 500);
+                const _payload = Object.assign(
+                    error.output.payload,
+                    { data: error.data },
+                    { message: error.message }
+                );
 
                 // change "statusCode" to "code"
-                _.set(_payload, 'code', _code);
-                _.unset(_payload, 'statusCode');
+                _.set(_payload, "code", _code);
+                _.unset(_payload, "statusCode");
 
                 // remove "data" if "null"
-                if (_.isNull(_payload.data))
-                    _.unset(_payload, 'data');
+                if (_.isNull(_payload.data)) _.unset(_payload, "data");
 
                 // respond
                 reply
                     .code(_code)
-                    .type('application/json')
+                    .type("application/json")
                     .headers(error.output.headers)
                     .send(_payload);
 
                 return;
             }
 
-            reply.send(error || new boom('Got non-error: ' + error));
-        })
+            reply.send(error || new boom("Got non-error: " + error));
+        });
 
         _server.register(responseDecorator);
 
         _server.register(headlocker);
-    }
+    };
+
+    const registerSocket = async () => {
+        _server.register(websocket);
+    };
 
     const registerRoutes = async ({ routes, prefix }) => {
-        if (!prefix) prefix = config.get('server').api_prefix;
+        if (!prefix) prefix = config.get("server").api_prefix;
 
         _server.register(routes, { prefix });
-    }
+    };
 
     const registerMiddleware = async (middleware, options = {}) => {
         _server.register(middleware, options);
-    }
+    };
 
     const decorateServer = async function decorateServer(key, value) {
         _server.decorate(key, value);
@@ -143,7 +158,10 @@ module.exports = async function FastServer(options) {
     const start = async function start() {
         try {
             await defaultInitialization();
-            await _server.listen(config.get('server').port, config.get('server').host);
+            await _server.listen(
+                config.get("server").port,
+                config.get("server").host
+            );
         } catch (_error) {
             console.error("Shutting Down Due To Fatal Exception >");
             console.error("Server Initialization Error >", _error);
@@ -154,8 +172,9 @@ module.exports = async function FastServer(options) {
     return {
         registerRoutes,
         registerMiddleware,
+        registerSocket,
         decorateServer,
         start,
         fastServer: _server,
     };
-}
+};
