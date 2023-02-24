@@ -1,7 +1,7 @@
 module.exports = function ListingRequestHandlers(opts) {
     const { listingMediator } = opts;
 
-    async function createListing(request, reply) {
+    async function createListing(request, reply) {  
         try {
             const { body } = request;
 
