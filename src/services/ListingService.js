@@ -14,8 +14,8 @@ module.exports = function ListingService(opts) {
             const priceId = priceResult[0]["id"];
 
             const listingResult = await t.query(listing.createListing, {
+                id: listingFormData.id,
                 title: listingFormData.title,
-                headline: listingFormData.headline,
                 description: listingFormData.description,
                 reason_for_selling: listingFormData.reason_for_selling,
                 industry: listingFormData.industry,
