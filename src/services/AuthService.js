@@ -2,13 +2,13 @@ module.exports = function AuthService(opts) {
     const { mdlTest, auth, db } = opts;
     async function initial() {
         // const result = db["primary"].task(async (t) => {
-        //      await t.any(mdlTest.industriesTable);
+        //     await t.any(mdlTest.industriesTable);
         //     // await t.any(mdlTest.location);
         // });
-        //const result = db["primary"].any(mdlTest.location);
-        // const result = db["primary"].query(mdlTest.location);
+        // result = db["primary"].any(mdlTest.location);
+        // result = db["primary"].query(mdlTest.location);
         // console.log(result);
-        // const result = db["primary"].task(async (t) => {
+        // result = db["primary"].task(async (t) => {
         //     await t.any(mdlTest.usertable);
         //     await t.any(mdlTest.sellerTabel);
         //     await t.any(mdlTest.chat);
@@ -22,6 +22,13 @@ module.exports = function AuthService(opts) {
         const result = db["primary"].query(mdlTest.insertCities, {
             label: value,
         });
+    }
+    async function getListing(offset) {
+        const result = db["primary"].query(mdlTest.getListing,{
+            offset: offset,
+        });
+        
+        return result;
     }
 
     async function writeMsgInDB({
@@ -150,5 +157,6 @@ module.exports = function AuthService(opts) {
         getMessages,
         getInbox,
         updateInbox,
+        getListing
     };
 };

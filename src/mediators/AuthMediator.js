@@ -5,6 +5,10 @@ module.exports = function AuthMediator(opts) {
         account = await authService.initial();
         return account;
     }
+    async function getListing(offset){
+        account = await authService.getListing(offset);
+        return account;
+    }
     async function insertCities(value) {
         result = await authService.insertCities(value);
         return result;
@@ -100,5 +104,6 @@ module.exports = function AuthMediator(opts) {
         getMessages,
         getInbox,
         updateInbox,
+        getListing,
     };
 };
