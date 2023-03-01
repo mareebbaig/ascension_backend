@@ -13,8 +13,16 @@ module.exports = function SelectableRequestSchema(opts) {
             handler: selectableRequestHandlers.getSelectables,
         };
     };
+    const fillSelectables = () => {
+        return { 
+            method: "GET",
+            url :  '/fillSelectables',
+            handler : selectableRequestHandlers.fillSelectables
+        }
+    }
 
     return {
         getSelectables,
+        fillSelectables
     };
 };
