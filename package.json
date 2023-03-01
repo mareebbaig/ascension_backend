@@ -98,6 +98,8 @@
 
     "checkout-sdk-node": "^1.0.17",
 
+    "child_process": "^1.0.2",
+
     "fastify": "^3.2.1",
 
     "fastify-boom": "^0.1.0",
