@@ -13,6 +13,11 @@ module.exports = function ListingService(opts) {
 
             const priceId = priceResult[0]["id"];
 
+            console.log(
+                "here ----------------------------------->",
+                listingFormData.assets
+            );
+
             const listingResult = await t.query(listing.createListing, {
                 id: listingFormData.id,
                 title: listingFormData.title,
@@ -24,6 +29,9 @@ module.exports = function ListingService(opts) {
                 is_established: listingFormData.is_established,
                 price: priceId,
                 seller: listingFormData.seller,
+                assets: listingFormData.assets,
+                opportunities: listingFormData.opportunities,
+                risks: listingFormData.risks,
             });
 
             const listingId = listingResult[0]["id"];

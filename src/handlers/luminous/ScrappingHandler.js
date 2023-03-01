@@ -46,7 +46,7 @@ module.exports = function ScrappingHandler(opts) {
         console.log("here -------------------->");
 
         try {
-            for (let i = 1; i <= 10; ++i) {
+            for (let i = 1; i <= 2; ++i) {
                 const { data } = await axios.get(
                     `https://api.empireflippers.com/api/v1/listings/list?page=${i}&limit=100`
                 );
@@ -85,6 +85,9 @@ module.exports = function ScrappingHandler(opts) {
                             location: 1,
                             images: [],
                             seller: await insertNewUser(),
+                            assets: listing.assets_included,
+                            opportunities: listing.opportunities,
+                            risks: listing.risks,
                         };
 
                         res = await listingMediator.createListing(newListing);

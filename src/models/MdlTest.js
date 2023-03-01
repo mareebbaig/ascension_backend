@@ -19,7 +19,7 @@ module.exports = function MdlTest() {
             "create table prices(id int GENERATED ALWAYS AS IDENTITY unique ,asking_price double precision not null,cash_flow double precision not null,gross_revenue double precision not null,inventory_price double precision, net_income double precision not null)",
 
         listingTable:
-            "create table listing(id varchar primary key, title varchar not null, description varchar not null,reason_for_selling varchar not null,industry int references industries(id), location int references locations(id) , is_auctioned bool not null,is_established bool not null, price int references prices(id) unique, seller varchar references users(user_id))",
+            "create table listing(id varchar primary key, title varchar not null, description varchar not null,reason_for_selling varchar not null,industry int references industries(id), location int references locations(id) , is_auctioned bool not null,is_established bool not null, price int references prices(id) unique, seller varchar references users(user_id),assets TEXT [],opportunities TEXT [],risks TEXT [])",
 
         imagesTable:
             "create table images(id int generated always as identity unique,listing_id varchar references listing(id) , image_url varchar)",
