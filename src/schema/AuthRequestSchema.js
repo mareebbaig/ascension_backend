@@ -70,6 +70,13 @@ module.exports = function AuthRequestSchema(opts) {
             wsHandler: authRequestHandlers.websocketHandler,
         };
     };
+    const GetListing = () => {
+        return {
+            method: "GET",
+            url: "/getListing",
+            handler: authRequestHandlers.getListing,
+        };
+    };
 
     const getInbox = () => {
         return {
@@ -88,5 +95,6 @@ module.exports = function AuthRequestSchema(opts) {
         CreateInbox,
         CreateConnection,
         getInbox,
+        GetListing,
     };
 };
