@@ -8,6 +8,11 @@ module.exports = function AuthRequestHandlers(opts) {
         const sent = await authMediator.initial();
         reply.send(JSON.stringify(sent));
     }
+    async function getListing(request, reply) {
+        const offset = request.query.offset || 0;
+        const sent = await authMediator.getListing(offset);
+        reply.send((sent));
+    }
 
     async function websocketHandler(connection, request) {
         const sender_id = request.query.sender_id;
@@ -179,5 +184,6 @@ module.exports = function AuthRequestHandlers(opts) {
         websocketHandler,
         handler,
         getInbox,
+        getListing,
     };
 };
