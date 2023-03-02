@@ -13,7 +13,7 @@ module.exports = function ListingRequestHandlers(opts) {
 
             reply.send(response);
         } catch (e) {
-            console.log(e);
+            console.log(e.message);
             reply.send(e);
         }
     }

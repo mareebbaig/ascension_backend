@@ -25,7 +25,7 @@ module.exports = function AuthRequestHandlers(opts) {
 
         // storing connected connection to the local storage --> todo:  redis mai save krna hai bad mai (stateless)
         webSockets[sender_id] = connection;
-        console.log("connected: " + sender_id);
+        // console.log("connected: " + sender_id);
 
         // event for message
         connection.socket.on("message", async (message) => {
@@ -106,7 +106,7 @@ module.exports = function AuthRequestHandlers(opts) {
                 reply.send(false);
             } else reply.send(true);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
             reply.send(error);
         }
     }
@@ -126,7 +126,7 @@ module.exports = function AuthRequestHandlers(opts) {
             const response = await authMediator.signUp({ ...body });
             reply.send(response);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
             reply.send(error);
         }
     }
@@ -160,7 +160,7 @@ module.exports = function AuthRequestHandlers(opts) {
                 }
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
             reply.send(error);
         }
     }

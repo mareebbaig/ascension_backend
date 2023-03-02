@@ -5,15 +5,22 @@ module.exports = function AuthService(opts) {
         //     await t.any(mdlTest.industriesTable);
         //     // await t.any(mdlTest.location);
         // });
-        // result = db["primary"].any(mdlTest.location);
-        // result = db["primary"].query(mdlTest.location);
+
+        // const result = db["primary"].any(mdlTest.location);
+        // const result = db["primary"].query(mdlTest.location);
         // console.log(result);
-        // result = db["primary"].task(async (t) => {
-        //     await t.any(mdlTest.usertable);
-        //     await t.any(mdlTest.sellerTabel);
-        //     await t.any(mdlTest.chat);
-        //     await t.any(mdlTest.inbox);
-        // });
+        const result = db["primary"].task(async (t) => {
+            await t.any(mdlTest.usertable);
+            await t.any(mdlTest.sellerTabel);
+            await t.any(mdlTest.chat);
+            await t.any(mdlTest.inbox);
+            await t.none(mdlTest.industriesTable);
+            await t.any(mdlTest.location);
+            await t.any(mdlTest.priceTable);
+            await t.any(mdlTest.listingTable);
+            await t.any(mdlTest.imagesTable);
+        });
+        return result;
         // const response = result;
         // return response;
     }
@@ -107,7 +114,7 @@ module.exports = function AuthService(opts) {
         title,
     }) {
         const result = db["primary"].task(async (t) => {
-            await t.none(auth.signup, {
+            res = await t.query(auth.signup, {
                 user_id,
                 first_name,
                 last_name,
@@ -122,6 +129,7 @@ module.exports = function AuthService(opts) {
                     title,
                 });
             }
+            return res
         });
         const response = result;
         return response;
