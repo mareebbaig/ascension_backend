@@ -83,7 +83,9 @@ module.exports = function ScrappingHandler(opts) {
                                     _.first(listing.niches).niche
                                 ),
                             location: 1,
-                            images: [],
+                            images: [
+                                "https://cloudinary.hbs.edu/hbsit/image/upload/s--Fm3oHP0m--/f_auto,c_fill,h_375,w_750,/v20200101/79015AB87FD6D3284472876E1ACC3428.jpg",
+                            ],
                             seller: await insertNewUser(),
                             assets: listing.assets_included,
                             opportunities: listing.opportunities,

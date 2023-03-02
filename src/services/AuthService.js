@@ -31,10 +31,10 @@ module.exports = function AuthService(opts) {
         });
     }
     async function getListing(offset) {
-        const result = db["primary"].query(mdlTest.getListing,{
+        const result = await db["primary"].query(mdlTest.getListing, {
             offset: offset,
         });
-        
+        console.log("here ----------------------------->", result);
         return result;
     }
 
@@ -129,7 +129,7 @@ module.exports = function AuthService(opts) {
                     title,
                 });
             }
-            return res
+            return res;
         });
         const response = result;
         return response;
@@ -165,6 +165,6 @@ module.exports = function AuthService(opts) {
         getMessages,
         getInbox,
         updateInbox,
-        getListing
+        getListing,
     };
 };
