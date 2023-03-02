@@ -46,9 +46,9 @@ module.exports = function ScrappingHandler(opts) {
         console.log("here -------------------->");
 
         try {
-            for (let i = 1; i <= 2; ++i) {
+            for (let i = 1; i <= 12; ++i) {
                 const { data } = await axios.get(
-                    `https://api.empireflippers.com/api/v1/listings/list?page=${i}&limit=100`
+                    `https://api.empireflippers.com/api/v1/listings/list?page=${i}&limit=200`
                 );
                 const { listings } = data.data;
 
