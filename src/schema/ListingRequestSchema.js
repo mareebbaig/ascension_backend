@@ -10,11 +10,27 @@ module.exports = function ListingRequestSchema(opts) {
             //         selectable: { type: "string" },
             //     },
             // },
-            handler: listingRequestHandlers.createListing
+            handler: listingRequestHandlers.createListing,
+        };
+    };
+    const getSimiliarListing = () => {
+        return {
+            method: "GET",
+            url: "/getSimilarlisitng/:niche",
+            handler: listingRequestHandlers.getSimiliarListing,
+        };
+    };
+    const getSingleListing = () => {
+        return {
+            method: "GET",
+            url: "/getSingleListing/:businessId",
+            handler: listingRequestHandlers.getSingleListing,
         };
     };
 
     return {
         createListing,
+        getSimiliarListing,
+        getSingleListing,
     };
 };

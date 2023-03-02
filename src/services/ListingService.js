@@ -51,7 +51,29 @@ module.exports = function ListingService(opts) {
         });
         return result;
     }
+
+    async function getSingleListing(businessId) {
+        const result = db["primary"].query(listing.getSingleListing, {
+            businessId,
+        });
+        return result;
+    }
+
+    async function getSimiliarListing(ids) {
+        ids = [
+            "0eb109f6-5f45-43ce-b94e-2cf92b4108bc",
+            "e52a7b8f-9960-468e-a109-22566dd73b5b",
+        ];
+        const result = await db["primary"].query(
+            "SELECT * FROM listing WHERE id IN ($1:csv)",
+            [ids]
+        );
+
+        return result;
+    }
     return {
         createListing,
+        getSingleListing,
+        getSimiliarListing,
     };
 };

@@ -4,7 +4,7 @@ const Joi = require("@hapi/joi"); //.extend(xss('object'), xss('array'), xss('st
 Joi.objectId = require("joi-objectid")(Joi);
 const Boom = require("@hapi/boom");
 const _ = require("lodash");
-
+const axios = require("axios");
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require("bcrypt");
@@ -29,6 +29,7 @@ module.exports = async function FastDI(options = {}) {
         bcrypt: awilix.asValue(bcrypt),
         _: awilix.asValue(_),
         jwt: awilix.asValue(jwt),
+        axios: awilix.asValue(axios),
     });
 
     container.loadModules(
