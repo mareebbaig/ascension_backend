@@ -9,8 +9,6 @@ const jwt = require("jsonwebtoken");
 
 const bcrypt = require("bcrypt");
 
-const axios = require("axios")
-
 const container = awilix.createContainer();
 
 module.exports = async function FastDI(options = {}) {
