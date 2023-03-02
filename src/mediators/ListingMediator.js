@@ -6,8 +6,19 @@ module.exports = function ListingMediator(opts) {
 
         return response;
     }
+    async function getSingleListing(businessId) {
+        const response = await listingService.getSingleListing(businessId);
+        return response;
+    }
+
+    async function getSimiliarListing(ids) {
+        const result = await listingService.getSimiliarListing(ids);
+        return result;
+    }
 
     return {
         createListing,
+        getSingleListing,
+        getSimiliarListing,
     };
 };

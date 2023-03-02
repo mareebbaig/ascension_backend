@@ -155,6 +155,27 @@ module.exports = async function FastServer(options) {
         _server.decorate(key, value);
     };
 
+    // const modelInitialization = async function () {
+    //     var dataToSend;
+    //     // spawn new child process to call the python script
+    //     const python = spawn("python", [
+    //         "F:/areeb/FAST/ascension_backend/modelScript/model.py",
+    //         "initilize",
+    //     ]);
+    //     // collect data from script
+    //     python.stdout.on("data", function (data) {
+    //         console.log("Pipe data from python script ...");
+    //         dataToSend = data.toString();
+    //         console.log(dataToSend);
+    //     });
+    //     // in close event we are sure that stream from child process is closed
+    //     python.on("close", (code) => {
+    //         console.log(`child process close all stdio with code ${code}`);
+    //         // send data to browser
+    //         console.log(dataToSend);
+    //     });
+    // };
+
     const start = async function start() {
         try {
             await defaultInitialization();
