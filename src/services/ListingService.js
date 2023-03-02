@@ -68,8 +68,9 @@ module.exports = function ListingService(opts) {
     }
 
     async function getSimiliarListing(ids) {
+        console.log("==================> ", ids);
         const result = await db["primary"].query(
-            "SELECT * FROM listing WHERE id IN ($1:csv)",
+            "SELECT title, description, countries.label as country, images.image_url, prices.asking_price from listing INNER JOIN locations on locations.id = listing.location inner join prices on prices.id = listing.price INNER JOIN countries on countries.id = locations.country INNER JOIN images on images.listing_id = listing.id where listing.id IN ($1:csv)",
             [ids]
         );
 
