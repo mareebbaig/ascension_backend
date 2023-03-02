@@ -1,6 +1,7 @@
 module.exports = function MdlTest() {
     return {
-        getListing: "SELECT title, description, cities.label as label1, countries.label as label2, images.image_url from listing INNER JOIN locations on locations.id = listing.location INNER JOIN cities on cities.id = locations.city INNER JOIN countries on countries.id = locations.country INNER JOIN images on images.listing_id = listing.id limit 2 offset ${offset}",
+        getListing:
+            "SELECT title, description, countries.label as country, images.image_url, prices.asking_price from listing INNER JOIN locations on locations.id = listing.location inner join prices on prices.id = listing.price INNER JOIN countries on countries.id = locations.country INNER JOIN images on images.listing_id = listing.id limit 10 offset ${offset}",
         usertable:
             "CREATE TABLE IF NOT EXISTS users(user_id VARCHAR PRIMARY KEY,first_name VARCHAR  NOT NULL,last_name VARCHAR  NOT NULL,email VARCHAR UNIQUE NOT NULL,password VARCHAR NOT NULL ,user_type int);",
         sellerTabel:
